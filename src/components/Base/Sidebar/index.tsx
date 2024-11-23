@@ -50,6 +50,11 @@ const menuGroups: MenuGroup[] = [
         label: 'Logs',
         route: '/logs',
       },
+      {
+        icon: <i className='fa-solid fa-bullhorn'></i>,
+        label: 'Broadcast',
+        route: '/logs',
+      },
     ],
   },
 ];
