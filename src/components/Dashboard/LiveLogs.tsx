@@ -1,5 +1,5 @@
 import { useWebSocket } from '@/contexts/WebSocketContext';
-import { useState, useEffect, useRef } from 'react'; // Adjust the path as needed
+import { useEffect, useRef, useState } from 'react'; // Adjust the path as needed
 
 const LiveLogs = () => {
   const { isConnected, socket } = useWebSocket();
@@ -37,23 +37,21 @@ const LiveLogs = () => {
     <div className='p-4'>
       <h2 className='text-2xl font-bold mb-4'>Live Logs</h2>
 
-      {/* Connection Status */}
-      <p className={`mb-4 ${isConnected ? 'text-green-500' : 'text-red-500'}`}>
-        {isConnected ? 'WebSocket Connected' : 'WebSocket Disconnected'}
-      </p>
-
       {/* Pause/Resume Button */}
-      <button
+      {/* <button
         onClick={() => setPaused(!paused)}
         className='mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition'>
         {paused ? 'Resume' : 'Pause'} Auto-Scroll
-      </button>
+      </button> */}
 
       {/* Log Container */}
       <div
         ref={logContainerRef}
         className='max-h-96 overflow-y-auto bg-gray-900 text-white p-4 rounded shadow-md'
         style={{ height: '400px' }}>
+        <div className='flex justify-end flex-grow'>
+          <i className={`fa-solid fa-server text-xl absolute ${isConnected ? 'text-green-500' : 'text-red-500'}`}></i>
+        </div>
         {logs.length === 0 ? (
           <p className='text-gray-500'>No logs available...</p>
         ) : (
@@ -65,7 +63,8 @@ const LiveLogs = () => {
               }`}>
               <p>
                 <span className='text-sm text-gray-400'>
-                  {new Date(log.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })} | {new Date(log.timestamp).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                  {new Date(log.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })} |{' '}
+                  {new Date(log.timestamp).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                 </span>
               </p>
               <p>{log.message}</p>
