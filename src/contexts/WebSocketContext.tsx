@@ -17,7 +17,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     if (!token) return;
     console.log('Connecting to WebSocket');
 
-    const ws = new WebSocket(`ws://192.168.43.84:8000/ws/dash/${JSON.parse(token).access}/`);
+    const ws = new WebSocket(`${process.env.NEXT_PUBLIC_WS_HOST}/ws/dash/${JSON.parse(token).access}/`);
 
     ws.onopen = () => {
       console.log('Connected to WebSocket');
