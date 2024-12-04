@@ -24,7 +24,7 @@ const LiveLogs = () => {
     return () => {
       if (socket) socket.onmessage = null; // Cleanup on unmount
     };
-  }, [socket]);
+  }, [socket, isConnected]);
 
   // Auto-scroll to top of logs container (if not paused)
   useEffect(() => {
