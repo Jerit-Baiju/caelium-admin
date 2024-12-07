@@ -3,7 +3,7 @@ import { useWebSocket } from '@/contexts/WebSocketContext';
 import { useEffect, useRef, useState } from 'react';
 import Wrapper from '../Wrapper';
 
-const page = () => {
+const Page = () => {
   const { isConnected, socket } = useWebSocket();
   const [logs, setLogs] = useState<any[]>([]);
   const [paused, setPaused] = useState(false);
@@ -74,4 +74,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
