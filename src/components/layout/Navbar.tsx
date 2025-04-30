@@ -139,7 +139,7 @@ export default function Navbar() {
               <div className="p-1">
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start px-3 py-2 text-sm gap-2" 
+                  className="w-full justify-start px-3 py-2 text-sm gap-2 focus-visible:ring-0" 
                   onClick={() => window.location.href = "/profile"}
                 >
                   <FiSettings className="h-4 w-4" />
@@ -147,7 +147,7 @@ export default function Navbar() {
                 </Button>
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start px-3 py-2 text-sm text-red-500 hover:text-red-500 gap-2" 
+                  className="w-full justify-start px-3 py-2 text-sm text-red-500 hover:text-red-500 gap-2 focus-visible:ring-0" 
                   onClick={logoutUser}
                 >
                   <FiMenu className="h-4 w-4" />
