@@ -31,7 +31,7 @@ export default function LoginPage() {
       <Card className='w-full max-w-md p-8 shadow-lg bg-card dark:bg-card border border-border'>
         <h1 className='text-2xl font-bold mb-6 text-center text-foreground'>Admin Login</h1>
         {error && (
-          <Alert variant='destructive' className='mb-4 whitespace-normal'>
+          <Alert variant='destructive' className='mb-4 flex'>
             Invalid credentials. Please try again.
           </Alert>
         )}
@@ -47,7 +47,7 @@ export default function LoginPage() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className='mt-1 bg-background border-border text-foreground'
+              className='mt-2 bg-background border-border text-foreground'
               placeholder='admin@example.com'
             />
           </div>
@@ -62,7 +62,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className='mt-1 bg-background border-border text-foreground'
+              className='mt-2 bg-background border-border text-foreground'
               placeholder='Your password'
             />
           </div>
