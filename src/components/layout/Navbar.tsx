@@ -123,7 +123,7 @@ export default function Navbar() {
             <PopoverTrigger asChild>
               <Button variant="ghost" className="p-1 rounded-full" aria-label="User menu">
                 <Avatar className="h-8 w-8 border border-border">
-                  <img src={user?.avatar || "https://github.com/shadcn.png"} alt="User" />
+                  <img src={typeof user?.avatar === 'string' ? user.avatar : "https://github.com/shadcn.png"} alt="User" />
                 </Avatar>
               </Button>
             </PopoverTrigger>

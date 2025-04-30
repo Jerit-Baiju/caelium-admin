@@ -2,11 +2,17 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import AuthContext from './AuthContext';
 
+interface SocketData {
+  type: string;
+  // Add other properties that might be in the socket data
+  [key: string]: unknown;
+}
+
 interface WebSocketContextType {
   socket: WebSocket | null;
   isConnected: boolean;
-  send: (data: any) => void;
-  socketData: any;
+  send: (data: Record<string, unknown>) => void;
+  socketData: SocketData | undefined;
 }
 
 const WebSocketContext = createContext<WebSocketContextType | null>(null);
@@ -14,7 +20,7 @@ const WebSocketContext = createContext<WebSocketContextType | null>(null);
 export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { logoutUser, authTokens } = useContext(AuthContext);
   const socketRef = useRef<WebSocket | null>(null);
-  const [socketData, setSocketData] = useState<any>();
+  const [socketData, setSocketData] = useState<SocketData>();
   const [isConnected, setIsConnected] = useState(false);
   const retryCountRef = useRef(0);
   const maxRetries = 10;
@@ -122,7 +128,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
   }, [authTokens, logoutUser]);
 
-  const send = (data: any) => {
+  const send = (data: Record<string, unknown>) => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {
       socketRef.current.send(JSON.stringify(data));
     } else {

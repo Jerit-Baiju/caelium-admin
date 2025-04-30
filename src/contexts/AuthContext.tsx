@@ -9,10 +9,30 @@ interface AuthTokens {
   refresh: string;
 }
 
+// TokenData interface to replace any type
+interface TokenData {
+  exp: number;
+  user_id: number;
+  email: string;
+  is_staff: boolean;
+  // Add other fields that might be in the JWT payload
+  [key: string]: unknown;
+}
+
+// User interface to replace any type
+interface User {
+  id: number;
+  email: string;
+  name?: string;
+  avatar?: string; // Adding avatar property explicitly
+  // Add other user properties as needed
+  [key: string]: unknown;
+}
+
 interface AuthContextProps {
   authTokens: AuthTokens | null;
-  tokenData: any;
-  user: any;
+  tokenData: TokenData | null;
+  user: User | null;
   error: string | null;
   loginUser: (username: string, password: string) => Promise<boolean>;
   logoutUser: () => void;
@@ -40,14 +60,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     return null;
   });
-  const [tokenData, setTokenData] = useState<any>(() => {
+  const [tokenData, setTokenData] = useState<TokenData | null>(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("authTokens");
       return stored ? jwtDecode(JSON.parse(stored).access) : null;
     }
     return null;
   });
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
   const API_HOST = process.env.NEXT_PUBLIC_API_HOST;
@@ -68,7 +88,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setTokenData(jwtDecode(response.data.access));
       scheduleTokenRefresh(response.data.access);
       return newTokens;
-    } catch (err) {
+    } catch (error) {
+      console.log("Token refresh failed", error);
       logoutUser();
       return null;
     }
@@ -78,7 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const scheduleTokenRefresh = (accessToken: string) => {
     if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current);
     try {
-      const decoded: any = jwtDecode(accessToken);
+      const decoded: TokenData = jwtDecode(accessToken);
       const expiry = decoded.exp * 1000;
       const timeUntilRefresh = expiry - Date.now() - 300000;
       if (timeUntilRefresh <= 0) {
@@ -123,8 +144,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       scheduleTokenRefresh(tokens.access);
       router.replace("/");
       return true;
-    } catch (err: any) {
+    } catch (error) {
       setError("Invalid credentials");
+      console.log("Login failed", error);
       setAuthTokens(null);
       setTokenData(null);
       return false;

@@ -61,7 +61,7 @@ export default function Home() {
         {/* Welcome Header */}
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Welcome to Caelium Admin</h1>
-          <p className="text-muted-foreground">Here's what's happening on your platform today.</p>
+          <p className="text-muted-foreground">Here&apos;s what&apos;s happening on your platform today.</p>
         </div>
 
         {/* Main Stats Grid */}

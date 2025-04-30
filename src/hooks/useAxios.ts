@@ -3,6 +3,15 @@ import { jwtDecode } from "jwt-decode";
 import { useContext } from "react";
 import AuthContext from "../contexts/AuthContext";
 
+// Import or define the TokenData interface
+interface TokenData {
+  exp: number;
+  user_id: number;
+  email: string;
+  is_staff: boolean;
+  [key: string]: unknown;
+}
+
 const baseURL = process.env.NEXT_PUBLIC_API_HOST || "";
 
 const useAxios = () => {
@@ -12,7 +21,7 @@ const useAxios = () => {
   api.interceptors.request.use(async (request) => {
     if (authTokens?.access) {
       try {
-        const decoded: any = jwtDecode(authTokens.access);
+        const decoded: TokenData = jwtDecode(authTokens.access);
         const expiry = decoded.exp * 1000;
         if (expiry - Date.now() < 60000) {
           const newTokens = await refreshToken();
