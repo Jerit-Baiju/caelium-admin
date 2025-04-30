@@ -123,14 +123,18 @@ export default function Navbar() {
             <PopoverTrigger asChild>
               <Button variant="ghost" className="p-1 rounded-full" aria-label="User menu">
                 <Avatar className="h-8 w-8 border border-border">
-                  <img src={typeof user?.avatar === 'string' ? user.avatar : "https://github.com/shadcn.png"} alt="User" />
+                  {user?.avatar ? (
+                    <img src={user.avatar} alt={user?.name || "User"} />
+                  ) : (
+                    <img src="logos/maskable-icon.png" alt="User" />
+                  )}
                 </Avatar>
               </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-56 p-0">
               <div className="p-3 border-b border-border">
                 <div className="font-medium">{user?.name || "Admin User"}</div>
-                <div className="text-xs text-muted-foreground">{user?.email || "admin@example.com"}</div>
+                <div className="text-xs text-muted-foreground">{user?.email || "admin@caelium.co"}</div>
               </div>
               <div className="p-1">
                 <Button 

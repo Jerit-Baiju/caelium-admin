@@ -122,6 +122,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // eslint-disable-next-line
   }, [authTokens]);
 
+  // Fetch user data when tokens are available
+  useEffect(() => {
+    const fetchMe = async () => {
+      try {
+        if (!authTokens?.access) return;
+
+        const decodedToken = jwtDecode(authTokens.access) as { user_id: number };
+        if (!decodedToken.user_id) return;
+
+        const response = await fetch(`${API_HOST}/api/auth/accounts/${decodedToken.user_id}/`);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const userData = await response.json();
+        setUser(userData);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        logoutUser();
+      }
+    };
+
+    if (authTokens) {
+      fetchMe();
+    }
+  }, [authTokens]);
+
   // Route protection
   useEffect(() => {
     const path = window.location.pathname;
