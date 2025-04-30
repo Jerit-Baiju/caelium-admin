@@ -4,13 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import AuthContext from "@/contexts/AuthContext";
+import { useWebSocket } from "@/contexts/SocketContext";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useContext, useEffect, useState } from "react";
-import { FiBell, FiMenu, FiMoon, FiSearch, FiSettings, FiSun } from "react-icons/fi";
+import { FiBell, FiMenu, FiMoon, FiSearch, FiServer, FiSettings, FiSun } from "react-icons/fi";
 
 export default function Navbar() {
   const { user, logoutUser } = useContext(AuthContext);
+  const { isConnected } = useWebSocket();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -57,6 +59,12 @@ export default function Navbar() {
 
         {/* Right Side Actions */}
         <div className="flex items-center space-x-4">
+          {/* Server Status Indicator */}
+          <div className="flex items-center">
+            <div className={`h-2 w-2 rounded-full mr-2 ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+            <FiServer className="h-5 w-5 text-foreground" />
+          </div>
+
           {/* Theme Toggle - Only show after hydration to prevent mismatch */}
           <Button 
             variant="ghost" 
