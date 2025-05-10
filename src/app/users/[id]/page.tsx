@@ -68,15 +68,6 @@ export default function UserDetailPage() {
         });
         setUser(response.data);
       } catch (error: unknown) {
-        // Ignore cancellation errors
-        if (
-          error &&
-          typeof error === 'object' &&
-          'code' in error &&
-          (error as any).code === 'ERR_CANCELED'
-        ) {
-          return;
-        }
         if (error instanceof Error) {
           console.error('Error fetching user details:', error.message);
         } else {
