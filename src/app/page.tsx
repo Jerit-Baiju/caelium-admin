@@ -5,7 +5,7 @@ import { ChartContainer } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
 import useAxios from "@/hooks/useAxios";
 import { useEffect, useState } from "react";
-import { FiActivity, FiAlertCircle, FiLayers, FiMessageCircle, FiPackage, FiTrendingUp, FiUsers } from "react-icons/fi";
+import { FiActivity, FiAlertCircle, FiFile, FiLayers, FiMessageCircle, FiTrendingUp, FiUsers } from "react-icons/fi";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 // Type definition for statistics
@@ -13,7 +13,7 @@ interface DashStats {
   users: number;
   messages: number;
   chats: number;
-  crafts: number;
+  cloudFiles: number;
   activeUsers?: number;
   totalContent?: number;
   reportedContent?: number;
@@ -89,10 +89,11 @@ export default function Home() {
             loading={loading}
             trend={+8.1}
           />
+          {/* Removed Crafts StatCard, replaced with Cloud Files */}
           <StatCard
-            icon={<FiPackage className="text-2xl" />}
-            label="Crafts"
-            value={stats?.crafts}
+            icon={<FiFile className="text-2xl" />}
+            label="Cloud Files"
+            value={stats?.cloudFiles}
             loading={loading}
             trend={+3.8}
           />
