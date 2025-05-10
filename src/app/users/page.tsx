@@ -195,7 +195,7 @@ export default function UsersPage() {
         
         {/* Filters and Search Card */}
         <Card>
-          <CardContent className="pt-6">
+          <CardContent>
             <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
               <form onSubmit={handleSearch} className="flex w-full md:w-1/2 space-x-2">
                 <div className="relative flex-1">
