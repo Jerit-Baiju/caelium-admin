@@ -1,10 +1,12 @@
 "use client";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card } from "@/components/ui/card";
+import { ChartContainer } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
 import useAxios from "@/hooks/useAxios";
 import { useEffect, useState } from "react";
 import { FiActivity, FiAlertCircle, FiLayers, FiMessageCircle, FiPackage, FiTrendingUp, FiUsers } from "react-icons/fi";
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 // Type definition for statistics
 interface DashStats {
@@ -12,9 +14,9 @@ interface DashStats {
   messages: number;
   chats: number;
   crafts: number;
-  activeUsers: number;
-  totalContent: number;
-  reportedContent: number;
+  activeUsers?: number;
+  totalContent?: number;
+  reportedContent?: number;
 }
 
 export default function Home() {
@@ -26,7 +28,7 @@ export default function Home() {
 
   useEffect(() => {
     // Fetch dashboard statistics
-    api.get("/api/dash/stats/")
+    api.get("/dash/stats/")
       .then(res => setStats(res.data))
       .catch(() => setStats(null))
       .finally(() => setLoading(false));
@@ -99,42 +101,37 @@ export default function Home() {
         {/* Activity Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* User Activity Chart */}
-          <Card className="p-6">
-            <div className="flex flex-col space-y-2">
-              <h3 className="text-lg font-medium">User Activity</h3>
-              <p className="text-sm text-muted-foreground">Daily active users over the last 7 days</p>
-              
-              <div className="h-64 mt-4 flex items-end justify-between gap-2">
-                {userActivity.map((day, index) => (
-                  <div key={index} className="flex flex-col items-center gap-2 w-full">
-                    <div 
-                      className="w-full bg-primary/80 hover:bg-primary transition-all rounded-t" 
-                      style={{height: `${(day.count / 600) * 100}%`}}
-                    ></div>
-                    <span className="text-xs text-muted-foreground">{day.day}</span>
-                  </div>
-                ))}
-              </div>
+          <Card className="p-6 flex flex-col space-y-2">
+            <h3 className="text-lg font-medium">User Activity</h3>
+            <p className="text-sm text-muted-foreground">Daily active users over the last 7 days</p>
+            <div className="flex-1 min-h-0 h-64">
+              <ChartContainer config={{ users: { label: "Users", color: "#6366f1" } }} className="h-full w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={userActivity}>
+                    <XAxis dataKey="day" tick={{ fill: "var(--muted-foreground)" }} />
+                    <YAxis tick={{ fill: "var(--muted-foreground)" }} />
+                    <Tooltip />
+                    <Bar dataKey="count" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartContainer>
             </div>
           </Card>
-          
           {/* Content Creation Chart */}
-          <Card className="p-6">
-            <div className="flex flex-col space-y-2">
-              <h3 className="text-lg font-medium">Content Activity</h3>
-              <p className="text-sm text-muted-foreground">Content created over the last 7 days</p>
-              
-              <div className="h-64 mt-4 flex items-end justify-between gap-2">
-                {contentActivity.map((day, index) => (
-                  <div key={index} className="flex flex-col items-center gap-2 w-full">
-                    <div 
-                      className="w-full bg-violet-500/80 hover:bg-violet-500 transition-all rounded-t" 
-                      style={{height: `${(day.count / 200) * 100}%`}}
-                    ></div>
-                    <span className="text-xs text-muted-foreground">{day.day}</span>
-                  </div>
-                ))}
-              </div>
+          <Card className="p-6 flex flex-col space-y-2">
+            <h3 className="text-lg font-medium">Content Activity</h3>
+            <p className="text-sm text-muted-foreground">Content created over the last 7 days</p>
+            <div className="flex-1 min-h-0 h-64">
+              <ChartContainer config={{ content: { label: "Content", color: "#a78bfa" } }} className="h-full w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={contentActivity}>
+                    <XAxis dataKey="day" tick={{ fill: "var(--muted-foreground)" }} />
+                    <YAxis tick={{ fill: "var(--muted-foreground)" }} />
+                    <Tooltip />
+                    <Bar dataKey="count" fill="#a78bfa" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartContainer>
             </div>
           </Card>
         </div>
