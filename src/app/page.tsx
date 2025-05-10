@@ -39,26 +39,21 @@ export default function Home() {
   const [stats, setStats] = useState<DashStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [trendPeriod, setTrendPeriod] = useState<'weekly' | 'monthly'>('weekly');
-  const [userActivity, setUserActivity] = useState<{day: string, count: number}[]>([]);
+  const [chatActivity, setChatActivity] = useState<{day: string, count: number}[]>([]);
   const [contentActivity, setContentActivity] = useState<{day: string, count: number}[]>([]);
 
   useEffect(() => {
     // Fetch dashboard statistics
     api.get("/dash/stats/")
-      .then(res => setStats(res.data))
-      .catch(() => setStats(null))
+      .then(res => {
+        setStats(res.data);
+        setChatActivity(res.data.chatActivity || []);
+      })
+      .catch(() => {
+        setStats(null);
+        setChatActivity([]);
+      })
       .finally(() => setLoading(false));
-
-    // Fetch user activity for the last 7 days (sample data for now)
-    setUserActivity([
-      {day: "Mon", count: 340},
-      {day: "Tue", count: 420},
-      {day: "Wed", count: 380},
-      {day: "Thu", count: 490},
-      {day: "Fri", count: 520},
-      {day: "Sat", count: 450},
-      {day: "Sun", count: 380},
-    ]);
 
     // Fetch content activity for the last 7 days (sample data for now)
     setContentActivity([
@@ -137,14 +132,14 @@ export default function Home() {
 
         {/* Activity Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* User Activity Chart */}
+          {/* Chat Activity Chart */}
           <Card className="p-6 flex flex-col space-y-2">
-            <h3 className="text-lg font-medium">User Activity</h3>
-            <p className="text-sm text-muted-foreground">Daily active users over the last 7 days</p>
+            <h3 className="text-lg font-medium">Chat Activity</h3>
+            <p className="text-sm text-muted-foreground">Chats created over the last 7 days</p>
             <div className="flex-1 min-h-0 h-64">
-              <ChartContainer config={{ users: { label: "Users", color: "#6366f1" } }} className="h-full w-full">
+              <ChartContainer config={{ chats: { label: "Chats", color: "#6366f1" } }} className="h-full w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={userActivity}>
+                  <BarChart data={chatActivity}>
                     <XAxis dataKey="day" tick={{ fill: "var(--muted-foreground)" }} />
                     <YAxis tick={{ fill: "var(--muted-foreground)" }} />
                     <Tooltip />
