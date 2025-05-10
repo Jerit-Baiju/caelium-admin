@@ -2,6 +2,7 @@
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card } from "@/components/ui/card";
 import { ChartContainer } from "@/components/ui/chart";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import useAxios from "@/hooks/useAxios";
 import { useEffect, useState } from "react";
@@ -9,11 +10,25 @@ import { FiActivity, FiAlertCircle, FiFile, FiLayers, FiMessageCircle, FiTrendin
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 // Type definition for statistics
-interface DashStats {
+interface TrendStats {
   users: number;
+  users_trend: number;
   messages: number;
+  messages_trend: number;
   chats: number;
+  chats_trend: number;
   cloudFiles: number;
+  cloudFiles_trend: number;
+}
+interface DashStats {
+  total: {
+    users: number;
+    messages: number;
+    chats: number;
+    cloudFiles: number;
+  };
+  weekly: TrendStats;
+  monthly: TrendStats;
   activeUsers?: number;
   totalContent?: number;
   reportedContent?: number;
@@ -23,6 +38,7 @@ export default function Home() {
   const { api } = useAxios();
   const [stats, setStats] = useState<DashStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [trendPeriod, setTrendPeriod] = useState<'weekly' | 'monthly'>('weekly');
   const [userActivity, setUserActivity] = useState<{day: string, count: number}[]>([]);
   const [contentActivity, setContentActivity] = useState<{day: string, count: number}[]>([]);
 
@@ -57,6 +73,9 @@ export default function Home() {
     // eslint-disable-next-line
   }, []);
 
+  const trendLabel = trendPeriod === 'weekly' ? 'this week' : 'this month';
+  const trendStats = stats ? stats[trendPeriod] : null;
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -66,36 +85,53 @@ export default function Home() {
           <p className="text-muted-foreground">Here&apos;s what&apos;s happening on your platform today.</p>
         </div>
 
+        {/* Trend Select */}
+        <div className="flex items-center gap-4 mb-2">
+          <span className="text-sm text-muted-foreground">Show trends for:</span>
+          <Select value={trendPeriod} onValueChange={v => setTrendPeriod(v as 'weekly' | 'monthly')}>
+            <SelectTrigger className="w-32">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="monthly">Monthly</SelectItem>
+              <SelectItem value="weekly">Weekly</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         {/* Main Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             icon={<FiUsers className="text-2xl" />}
             label="Total Users"
-            value={stats?.users}
+            value={stats?.total.users}
             loading={loading}
-            trend={+5.2}
+            trend={trendStats?.users_trend ?? 0}
+            trendLabel={trendLabel}
           />
           <StatCard
             icon={<FiMessageCircle className="text-2xl" />}
             label="Messages"
-            value={stats?.messages}
+            value={stats?.total.messages}
             loading={loading}
-            trend={+12.5}
+            trend={trendStats?.messages_trend ?? 0}
+            trendLabel={trendLabel}
           />
           <StatCard
             icon={<FiLayers className="text-2xl" />}
             label="Chats"
-            value={stats?.chats}
+            value={stats?.total.chats}
             loading={loading}
-            trend={+8.1}
+            trend={trendStats?.chats_trend ?? 0}
+            trendLabel={trendLabel}
           />
-          {/* Removed Crafts StatCard, replaced with Cloud Files */}
           <StatCard
             icon={<FiFile className="text-2xl" />}
             label="Cloud Files"
-            value={stats?.cloudFiles}
+            value={stats?.total.cloudFiles}
             loading={loading}
-            trend={+3.8}
+            trend={trendStats?.cloudFiles_trend ?? 0}
+            trendLabel={trendLabel}
           />
         </div>
 
