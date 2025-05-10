@@ -67,8 +67,21 @@ export default function UserDetailPage() {
           signal: controller.signal,
         });
         setUser(response.data);
-      } catch (error: any) {
-        console.error('Error fetching user details:', error);
+      } catch (error: unknown) {
+        // Ignore cancellation errors
+        if (
+          error &&
+          typeof error === 'object' &&
+          'code' in error &&
+          (error as any).code === 'ERR_CANCELED'
+        ) {
+          return;
+        }
+        if (error instanceof Error) {
+          console.error('Error fetching user details:', error.message);
+        } else {
+          console.error('Error fetching user details:', error);
+        }
       } finally {
         setLoading(false);
       }

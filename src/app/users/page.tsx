@@ -96,6 +96,7 @@ export default function UsersPage() {
 
   useEffect(() => {
     fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusFilter, sortBy]);
 
   // Handle search
@@ -120,11 +121,6 @@ export default function UsersPage() {
   };
 
   // Handle user deletion
-  const confirmDelete = (user: User) => {
-    setUserToDelete(user);
-    setDeleteAlertOpen(true);
-  };
-
   const handleDeleteUser = () => {
     if (!userToDelete) return;
     
@@ -334,7 +330,7 @@ export default function UsersPage() {
                           <FiUserX className="h-10 w-10 text-muted-foreground mb-3" />
                           <h3 className="text-lg font-medium">No users found</h3>
                           <p className="text-muted-foreground">
-                            Try adjusting your search or filter to find what you're looking for.
+                            Try adjusting your search or filter to find what you&apos;re looking for.
                           </p>
                           <Button 
                             variant="outline" 

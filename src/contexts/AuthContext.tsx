@@ -148,6 +148,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (authTokens) {
       fetchMe();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authTokens]);
 
   // Route protection
