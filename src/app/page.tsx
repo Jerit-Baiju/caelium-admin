@@ -38,7 +38,7 @@ export default function Home() {
   const [stats, setStats] = useState<DashStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [chatActivity, setChatActivity] = useState<{day: string, count: number}[]>([]);
-  const [contentActivity, setContentActivity] = useState<{day: string, count: number}[]>([]);
+  const [cloudActivity, setCloudActivity] = useState<{day: string, count: number}[]>([]);
 
   useEffect(() => {
     // Fetch dashboard statistics
@@ -46,23 +46,15 @@ export default function Home() {
       .then(res => {
         setStats(res.data);
         setChatActivity(res.data.chatActivity || []);
+        setCloudActivity(res.data.cloudActivity || []);
       })
       .catch(() => {
         setStats(null);
         setChatActivity([]);
+        setCloudActivity([]);
       })
       .finally(() => setLoading(false));
 
-    // Fetch content activity for the last 7 days (sample data for now)
-    setContentActivity([
-      {day: "Mon", count: 120},
-      {day: "Tue", count: 150},
-      {day: "Wed", count: 140},
-      {day: "Thu", count: 180},
-      {day: "Fri", count: 190},
-      {day: "Sat", count: 170},
-      {day: "Sun", count: 130},
-    ]);
     // eslint-disable-next-line
   }, []);
 
@@ -134,14 +126,14 @@ export default function Home() {
               </ChartContainer>
             </div>
           </Card>
-          {/* Content Creation Chart */}
+          {/* Cloud Activity Chart */}
           <Card className="p-6 flex flex-col space-y-2">
-            <h3 className="text-lg font-medium">Content Activity</h3>
-            <p className="text-sm text-muted-foreground">Content created over the last 7 days</p>
+            <h3 className="text-lg font-medium">Cloud Activity</h3>
+            <p className="text-sm text-muted-foreground">Files uploaded over the last 7 days</p>
             <div className="flex-1 min-h-0 h-64">
-              <ChartContainer config={{ content: { label: "Content", color: "#a78bfa" } }} className="h-full w-full">
+              <ChartContainer config={{ cloud: { label: "Cloud Files", color: "#a78bfa" } }} className="h-full w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={contentActivity}>
+                  <BarChart data={cloudActivity}>
                     <XAxis dataKey="day" tick={{ fill: "var(--muted-foreground)" }} />
                     <YAxis tick={{ fill: "var(--muted-foreground)" }} />
                     <Tooltip />
