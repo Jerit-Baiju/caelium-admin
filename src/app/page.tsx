@@ -2,7 +2,6 @@
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card } from "@/components/ui/card";
 import { ChartContainer } from "@/components/ui/chart";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import useAxios from "@/hooks/useAxios";
 import { useEffect, useState } from "react";
@@ -38,7 +37,6 @@ export default function Home() {
   const { api } = useAxios();
   const [stats, setStats] = useState<DashStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [trendPeriod, setTrendPeriod] = useState<'weekly' | 'monthly'>('weekly');
   const [chatActivity, setChatActivity] = useState<{day: string, count: number}[]>([]);
   const [contentActivity, setContentActivity] = useState<{day: string, count: number}[]>([]);
 
@@ -68,8 +66,9 @@ export default function Home() {
     // eslint-disable-next-line
   }, []);
 
-  const trendLabel = trendPeriod === 'weekly' ? 'this week' : 'this month';
-  const trendStats = stats ? stats[trendPeriod] : null;
+  // Only use weekly stats
+  const trendStats = stats ? stats.weekly : null;
+  const trendLabel = 'this week';
 
   return (
     <DashboardLayout>
@@ -78,20 +77,6 @@ export default function Home() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Welcome to Caelium Admin</h1>
           <p className="text-muted-foreground">Here&apos;s what&apos;s happening on your platform today.</p>
-        </div>
-
-        {/* Trend Select */}
-        <div className="flex items-center gap-4 mb-2">
-          <span className="text-sm text-muted-foreground">Show trends for:</span>
-          <Select value={trendPeriod} onValueChange={v => setTrendPeriod(v as 'weekly' | 'monthly')}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="monthly">Monthly</SelectItem>
-              <SelectItem value="weekly">Weekly</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
 
         {/* Main Stats Grid */}
