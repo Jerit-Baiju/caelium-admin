@@ -1,22 +1,23 @@
 "use client";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { 
-  FiHome, 
-  FiUsers, 
-  FiMessageCircle, 
-  FiSettings, 
-  FiPackage, 
-  FiActivity, 
-  FiAlertCircle, 
-  FiLayers,
-  FiServer,
-  FiSlack,
-  FiLogOut
-} from "react-icons/fi";
-import { useContext } from "react";
 import AuthContext from "@/contexts/AuthContext";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useContext } from "react";
+import {
+  FiActivity,
+  FiAlertCircle,
+  FiCloud,
+  FiHome,
+  FiLayers,
+  FiLogOut,
+  FiMessageCircle,
+  FiPackage,
+  FiServer,
+  FiSettings,
+  FiSlack,
+  FiUsers
+} from "react-icons/fi";
 
 const sidebarLinks = [
   { 
@@ -34,6 +35,7 @@ const sidebarLinks = [
       { name: "Messages", url: "/messages", icon: FiMessageCircle },
       { name: "Chats", url: "/chats", icon: FiLayers },
       { name: "Crafts", url: "/crafts", icon: FiPackage },
+      { name: "Cloud Files", url: "/cloud/files", icon: FiCloud },
     ]
   },
   {
